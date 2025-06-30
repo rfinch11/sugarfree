@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.4">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Submit a Kid-Friendly Activity&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script src="https://www.google.com/recaptcha/api.js" async defer&gt;&lt;/script&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;main&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1&gt;Submit a Kid-Friendly Event or Activity&lt;/h1&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;form id="activity-form"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;fieldset&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;legend&gt;Type&lt;/legend&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;label&gt;&lt;input type="radio" name="activityType" value="Activity" required /&gt; Activity&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;label&gt;&lt;input type="radio" name="activityType" value="Event" required /&gt; Event&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/fieldset&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;fieldset&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;label&gt;Name:&lt;br&gt;&lt;input type="text" id="name" required /&gt;&lt;/label&gt;&lt;br&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;label&gt;Location:&lt;br&gt;&lt;input type="text" id="location" required /&gt;&lt;/label&gt;&lt;br&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;label&gt;Description:&lt;br&gt;&lt;textarea id="description" required&gt;&lt;/textarea&gt;&lt;/label&gt;&lt;br&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;label&gt;Link:&lt;br&gt;&lt;input type="url" id="link" /&gt;&lt;/label&gt;&lt;br&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;label&gt;Parent Tips:&lt;br&gt;&lt;textarea id="tips"&gt;&lt;/textarea&gt;&lt;/label&gt;&lt;br&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/fieldset&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;fieldset&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;label&gt;Event Date:&lt;br&gt;&lt;input type="date" id="eventDate" /&gt;&lt;/label&gt;&lt;br&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;label&gt;Start Time:&lt;br&gt;&lt;input type="time" id="startTime" /&gt;&lt;/label&gt;&lt;br&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;label&gt;End Time:&lt;br&gt;&lt;input type="time" id="endTime" /&gt;&lt;/label&gt;&lt;br&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;label&gt;&lt;input type="checkbox" id="recurring" /&gt; Recurring&lt;/label&gt;&lt;br&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;label&gt;Frequency:&lt;br&gt;&lt;input type="text" id="frequency" /&gt;&lt;/label&gt;&lt;br&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;label&gt;&lt;input type="checkbox" id="registrationRequired" /&gt; Registration Required&lt;/label&gt;&lt;br&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/fieldset&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div id="dropzone"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;📸 Drag and drop photos here or click to select&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="file" id="photos" accept="image/*" multiple hidden /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div id="image-preview" style="display: flex; flex-wrap: wrap; gap: 1rem;"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;br&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button type="submit"&gt;Submit&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/form&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="/scripts/upload.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/main&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
