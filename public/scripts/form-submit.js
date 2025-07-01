@@ -49,7 +49,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (typeof previewContainer !== 'undefined') previewContainer.innerHTML = '';
         grecaptcha.reset();
       } else {
-        alert(data.error || 'Submission failed');
+        const errorInfo = data.error;
+        const message = typeof errorInfo === 'object'
+          ? errorInfo.message || JSON.stringify(errorInfo)
+          : errorInfo;
+        alert(message || 'Submission failed');
       }
     } catch (err) {
       console.error(err);
