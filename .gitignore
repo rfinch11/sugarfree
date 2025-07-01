@@ -1,0 +1,31 @@
+# Node modules
+node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# dotenv environment files
+.env
+.env.*
+
+# Build directories
+build/
+dist/
+
+# Coverage directory
+coverage/
+
+# Temporary files
+.tmp/
+.temp/
+
+# Output of next.js or other frameworks
+.next/
+out/
+
+# Misc
+.DS_Store
