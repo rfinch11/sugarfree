@@ -1,7 +1,11 @@
-const supabaseClient = window.supabase.createClient(
-  'https://rdnykfqczccsavwouhhk.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkbnlrZnFjemNjc2F2d291aGhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMDg1MjgsImV4cCI6MjA2Njc4NDUyOH0.bmC3ZXqfmYhPmeinLnLDINR5sLCHkO_EfkCx6u_AyJw'
-);
+const supabaseUrl = window.SUPABASE_URL;
+const supabaseAnonKey = window.SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error('SUPABASE_URL and SUPABASE_ANON_KEY must be defined.');
+}
+
+const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
 const dropzone = document.getElementById('dropzone');
 const fileInput = document.getElementById('photos');
