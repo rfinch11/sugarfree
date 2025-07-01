@@ -8,13 +8,13 @@ This project contains a simple frontend and an accompanying API endpoint. Users 
 
 Set the following variables before starting the API:
 
-- AIRTABLE_TOKEN – your Airtable API token.
-- RECAPTCHA_SECRET – secret for verifying reCAPTCHA.
-- SUPABASE_URL – URL of your Supabase instance.
-- SUPABASE_ANON_KEY – anon/public key for Supabase.
+- `AIRTABLE_TOKEN` – your Airtable API token.
+- `RECAPTCHA_SECRET` – secret for verifying reCAPTCHA.
 
-Expose these same values to the frontend by defining
-`window.SUPABASE_URL` and `window.SUPABASE_ANON_KEY` in your page:
+The upload script expects `SUPABASE_URL` and `SUPABASE_ANON_KEY` to be
+available in the browser environment. Provide them through your build
+tool or by defining `window.SUPABASE_URL` and `window.SUPABASE_ANON_KEY`
+in your page:
 
 ```html
 <script>
@@ -46,6 +46,9 @@ You can run the handler locally with a lightweight server such as `micro`:
 ```
 npx micro api/submit.js
 ```
+
+Node.js 18 or newer is required so that the built-in `fetch` API used in
+`api/submit.js` is available.
 
 Ensure all environment variables listed above are available to the process.
 

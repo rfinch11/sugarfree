@@ -1,5 +1,9 @@
-const supabaseUrl = window.SUPABASE_URL;
-const supabaseAnonKey = window.SUPABASE_ANON_KEY;
+const supabaseUrl =
+  (typeof process !== 'undefined' && process.env.SUPABASE_URL) ||
+  window.SUPABASE_URL;
+const supabaseAnonKey =
+  (typeof process !== 'undefined' && process.env.SUPABASE_ANON_KEY) ||
+  window.SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('SUPABASE_URL and SUPABASE_ANON_KEY must be defined.');
