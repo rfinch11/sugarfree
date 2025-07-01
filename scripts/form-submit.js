@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
       Recurring: document.getElementById('recurring').checked,
       Frequency: document.getElementById('frequency').value,
       'Registration Required': document.getElementById('registrationRequired').checked,
-      Photos: uploaded.map(u => u.url)
+      Photos: uploaded.map(u => ({ url: u.url }))
     };
 
     const captchaToken = grecaptcha.getResponse();
