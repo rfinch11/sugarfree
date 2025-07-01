@@ -33,7 +33,7 @@ npx serve public
 
 This hosts `index.html` which loads the form scripts.
 
-Replace the `YOUR_SITE_KEY` placeholder in `public/index.html` with a real site key from Google reCAPTCHA. Register your domain in the [reCAPTCHA admin console](https://www.google.com/recaptcha/admin) to generate a key.
+The form includes a reCAPTCHA widget using the site key `6LeJTHIrAAAAANJXinmmjlQ__RdHmph6_pCo4H4u`. If you have your own site key, update the `data-sitekey` attribute in `public/index.html` accordingly. Register your domain in the [reCAPTCHA admin console](https://www.google.com/recaptcha/admin) to generate a key.
 
 ### Running the API
 
