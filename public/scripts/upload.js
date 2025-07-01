@@ -30,10 +30,33 @@ try {
 }
 const MAX_FILES = 5;
 const MAX_FILE_SIZE_MB = 5;
+const MAX_DIMENSION = 4000;
 
-export function isValidFile(file) {
+export async function isValidFile(file) {
   const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
-  return validTypes.includes(file.type) && file.size / 1024 / 1024 <= MAX_FILE_SIZE_MB;
+  const isBasicValid = validTypes.includes(file.type) &&
+    file.size / 1024 / 1024 <= MAX_FILE_SIZE_MB;
+  if (!isBasicValid) return false;
+
+  if (typeof Image === 'undefined') {
+    return true;
+  }
+
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => {
+      if (img.width > MAX_DIMENSION || img.height > MAX_DIMENSION) {
+        if (typeof alert !== 'undefined') {
+          alert(`Image dimensions exceed ${MAX_DIMENSION}x${MAX_DIMENSION}px`);
+        }
+        resolve(false);
+      } else {
+        resolve(true);
+      }
+    };
+    img.onerror = () => resolve(false);
+    img.src = URL.createObjectURL(file);
+  });
 }
 
 function showImagePreviews(files) {
@@ -49,14 +72,18 @@ function showImagePreviews(files) {
   }
 }
 
-function handleFiles(selectedFiles) {
-  const validFiles = Array.from(selectedFiles).filter(file => {
-    if (!isValidFile(file)) {
-      alert(`Invalid file: ${file.name}`);
-      return false;
+async function handleFiles(selectedFiles) {
+  const validFiles = [];
+  for (const file of Array.from(selectedFiles)) {
+    const valid = await isValidFile(file);
+    if (!valid) {
+      if (typeof alert !== 'undefined') {
+        alert(`Invalid file: ${file.name}`);
+      }
+      continue;
     }
-    return true;
-  });
+    validFiles.push(file);
+  }
 
   if (validFiles.length > MAX_FILES) {
     alert(`You can only upload up to ${MAX_FILES} images.`);
