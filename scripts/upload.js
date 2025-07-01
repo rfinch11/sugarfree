@@ -1,4 +1,4 @@
-const supabase = supabase.createClient(
+const supabaseClient = window.supabase.createClient(
   'https://rdnykfqczccsavwouhhk.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkbnlrZnFjemNjc2F2d291aGhrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEyMDg1MjgsImV4cCI6MjA2Njc4NDUyOH0.bmC3ZXqfmYhPmeinLnLDINR5sLCHkO_EfkCx6u_AyJw'
 );
@@ -63,9 +63,9 @@ async function uploadImagesToSupabasePrivate(files) {
   const uploaded = [];
   for (let file of files) {
     const filePath = `${Date.now()}_${file.name}`;
-    const { error: uploadError } = await supabase.storage.from('photos').upload(filePath, file);
+    const { error: uploadError } = await supabaseClient.storage.from('photos').upload(filePath, file);
     if (uploadError) continue;
-    const { data: signedData } = await supabase.storage.from('photos').createSignedUrl(filePath, 604800);
+    const { data: signedData } = await supabaseClient.storage.from('photos').createSignedUrl(filePath, 604800);
     uploaded.push({ url: signedData.signedUrl, fallback_url: filePath });
   }
   return uploaded;
