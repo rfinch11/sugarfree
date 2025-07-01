@@ -37,7 +37,11 @@ Replace the `YOUR_SITE_KEY` placeholder in `public/index.html` with a real site 
 
 ### Running the API
 
-`api/submit.js` exports a Node handler. You can run it locally with a lightweight server such as `micro`:
+The API handler in `api/submit.js` uses ES module syntax. A minimal
+`package.json` in the repository root sets `"type": "module"` so that Node will
+load the file correctly.
+
+You can run the handler locally with a lightweight server such as `micro`:
 
 ```
 npx micro api/submit.js
