@@ -53,3 +53,17 @@ Node.js 18 or newer is required so that the built-in `fetch` API used in
 
 Ensure all environment variables listed above are available to the process.
 
+
+### Development
+
+Install dependencies and run linting or tests with npm:
+
+```sh
+npm install
+npm run lint
+npm test
+```
+
+### Continuous Integration
+
+A GitHub Actions workflow runs ESLint and Jest on each push.

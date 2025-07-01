@@ -1,21 +1,27 @@
-const dropzone = document.getElementById('dropzone');
-const fileInput = document.getElementById('photos');
-const previewContainer = document.getElementById('image-preview');
+let dropzone, fileInput, previewContainer;
 let supabaseClient;
+
+if (typeof document !== 'undefined') {
+  dropzone = document.getElementById('dropzone');
+  fileInput = document.getElementById('photos');
+  previewContainer = document.getElementById('image-preview');
+}
 
 try {
   const supabaseUrl =
     (typeof process !== 'undefined' && process.env.SUPABASE_URL) ||
-    window.SUPABASE_URL;
+    (typeof window !== 'undefined' && window.SUPABASE_URL);
   const supabaseAnonKey =
     (typeof process !== 'undefined' && process.env.SUPABASE_ANON_KEY) ||
-    window.SUPABASE_ANON_KEY;
+    (typeof window !== 'undefined' && window.SUPABASE_ANON_KEY);
 
   if (!supabaseUrl || !supabaseAnonKey) {
     throw new Error('SUPABASE_URL and SUPABASE_ANON_KEY must be defined.');
   }
 
-  supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+  if (typeof window !== 'undefined' && window.supabase) {
+    supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+  }
 } catch (err) {
   console.error('Supabase initialization failed:', err);
   if (dropzone) {
@@ -25,7 +31,7 @@ try {
 const MAX_FILES = 5;
 const MAX_FILE_SIZE_MB = 5;
 
-function isValidFile(file) {
+export function isValidFile(file) {
   const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
   return validTypes.includes(file.type) && file.size / 1024 / 1024 <= MAX_FILE_SIZE_MB;
 }
@@ -64,18 +70,20 @@ function handleFiles(selectedFiles) {
   showImagePreviews(validFiles);
 }
 
-dropzone.addEventListener('click', () => fileInput.click());
-dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.style.borderColor = '#0077ff'; });
-dropzone.addEventListener('dragleave', () => dropzone.style.borderColor = '#ccc');
-dropzone.addEventListener('drop', e => {
-  e.preventDefault();
-  dropzone.style.borderColor = '#ccc';
-  handleFiles(e.dataTransfer.files);
-});
+if (dropzone && fileInput) {
+  dropzone.addEventListener('click', () => fileInput.click());
+  dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.style.borderColor = '#0077ff'; });
+  dropzone.addEventListener('dragleave', () => dropzone.style.borderColor = '#ccc');
+  dropzone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropzone.style.borderColor = '#ccc';
+    handleFiles(e.dataTransfer.files);
+  });
 
-fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+  fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
+}
 
-async function uploadImagesToSupabasePrivate(files) {
+export async function uploadImagesToSupabasePrivate(files) {
   if (!supabaseClient) {
     console.error('Supabase client not initialized');
     return [];
