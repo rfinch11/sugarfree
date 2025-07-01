@@ -79,4 +79,9 @@ async function uploadImagesToSupabasePrivate(files) {
   return uploaded;
 }
 
+// Make available to other scripts when not using modules
+if (typeof window !== 'undefined') {
+  window.uploadImagesToSupabasePrivate = uploadImagesToSupabasePrivate;
+}
+
 // Final form submission handler could be included here or inline in index.html
