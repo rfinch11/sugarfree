@@ -1,3 +1,5 @@
+import { json as parseJson } from 'micro';
+
 export default async function handler(req, res) {
   if (req.method === 'OPTIONS') {
     res.setHeader('Access-Control-Allow-Origin', 'https://sugar-free.family');
@@ -13,7 +15,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { fields, captchaToken } = req.body;
+  const { fields, captchaToken } = await parseJson(req);
 
   // 🔐 reCAPTCHA verification
   const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET;

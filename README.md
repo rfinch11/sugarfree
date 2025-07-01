@@ -39,7 +39,8 @@ Replace the `YOUR_SITE_KEY` placeholder in `public/index.html` with a real site 
 
 The API handler in `api/submit.js` uses ES module syntax. A minimal
 `package.json` in the repository root sets `"type": "module"` so that Node will
-load the file correctly.
+load the file correctly. It also uses `micro`'s `json` helper to read the request
+body.
 
 You can run the handler locally with a lightweight server such as `micro`:
 
