@@ -23,6 +23,8 @@ npx serve public
 
 This hosts `index.html` which loads the form scripts. Update `scripts/upload.js` with your Supabase credentials if necessary.
 
+Replace the `YOUR_SITE_KEY` placeholder in `public/index.html` with a real site key from Google reCAPTCHA. Register your domain in the [reCAPTCHA admin console](https://www.google.com/recaptcha/admin) to generate a key.
+
 ### Running the API
 
 `api/submit.js` exports a Node handler. You can run it locally with a lightweight server such as `micro`:
