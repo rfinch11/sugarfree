@@ -1,19 +1,27 @@
-const supabaseUrl =
-  (typeof process !== 'undefined' && process.env.SUPABASE_URL) ||
-  window.SUPABASE_URL;
-const supabaseAnonKey =
-  (typeof process !== 'undefined' && process.env.SUPABASE_ANON_KEY) ||
-  window.SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('SUPABASE_URL and SUPABASE_ANON_KEY must be defined.');
-}
-
-const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
-
 const dropzone = document.getElementById('dropzone');
 const fileInput = document.getElementById('photos');
 const previewContainer = document.getElementById('image-preview');
+let supabaseClient;
+
+try {
+  const supabaseUrl =
+    (typeof process !== 'undefined' && process.env.SUPABASE_URL) ||
+    window.SUPABASE_URL;
+  const supabaseAnonKey =
+    (typeof process !== 'undefined' && process.env.SUPABASE_ANON_KEY) ||
+    window.SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error('SUPABASE_URL and SUPABASE_ANON_KEY must be defined.');
+  }
+
+  supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+} catch (err) {
+  console.error('Supabase initialization failed:', err);
+  if (dropzone) {
+    dropzone.innerHTML = '<p style="color:red;">Image uploads are currently unavailable.</p>';
+  }
+}
 const MAX_FILES = 5;
 const MAX_FILE_SIZE_MB = 5;
 
@@ -68,6 +76,10 @@ dropzone.addEventListener('drop', e => {
 fileInput.addEventListener('change', (e) => handleFiles(e.target.files));
 
 async function uploadImagesToSupabasePrivate(files) {
+  if (!supabaseClient) {
+    console.error('Supabase client not initialized');
+    return [];
+  }
   const uploaded = [];
   for (let file of files) {
     const filePath = `${Date.now()}_${file.name}`;
