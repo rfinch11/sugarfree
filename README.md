@@ -13,6 +13,16 @@ Set the following variables before starting the API:
 - SUPABASE_URL – URL of your Supabase instance.
 - SUPABASE_ANON_KEY – anon/public key for Supabase.
 
+Expose these same values to the frontend by defining
+`window.SUPABASE_URL` and `window.SUPABASE_ANON_KEY` in your page:
+
+```html
+<script>
+  window.SUPABASE_URL = 'https://your-project.supabase.co';
+  window.SUPABASE_ANON_KEY = 'public-anon-key';
+</script>
+```
+
 ### Running the frontend
 
 Serve the `public/` directory with any static file server, for example:
@@ -21,7 +31,7 @@ Serve the `public/` directory with any static file server, for example:
 npx serve public
 ```
 
-This hosts `index.html` which loads the form scripts. Update `scripts/upload.js` with your Supabase credentials if necessary.
+This hosts `index.html` which loads the form scripts.
 
 ### Running the API
 
