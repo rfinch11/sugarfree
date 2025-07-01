@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let uploaded = [];
     if (files && files.length) {
       try {
-        uploaded = await uploadImagesToSupabasePrivate(files);
+        uploaded = await window.uploadImagesToSupabasePrivate(files);
       } catch (err) {
         console.error('Image upload failed:', err);
       }
