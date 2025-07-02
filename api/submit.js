@@ -1,69 +1,67 @@
-import { json as parseJson } from 'micro';
-
 export default async function handler(req, res) {
-  if (req.method === 'OPTIONS') {
-    res.setHeader('Access-Control-Allow-Origin', 'https://sugar-free.family');
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    return res.status(204).end();
-  }
-
   if (req.method !== 'POST') {
-    res.setHeader('Access-Control-Allow-Origin', 'https://sugar-free.family');
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { fields, captchaToken } = await parseJson(req);
+  const token = process.env.AIRTABLE_TOKEN;
+  const baseId = 'appNEwC9kmw1NTshd';
+  const table = 'Submissions';
 
-  // 🔐 reCAPTCHA verification
-  const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET;
-  const captchaVerify = await fetch('https://www.google.com/recaptcha/api/siteverify', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: `secret=${RECAPTCHA_SECRET}&response=${captchaToken}`
-  });
-
-  const captchaResult = await captchaVerify.json();
-  if (!captchaResult.success) {
-    res.setHeader('Access-Control-Allow-Origin', 'https://sugar-free.family');
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    return res.status(403).json({ error: 'reCAPTCHA verification failed' });
-  }
-
-  const AIRTABLE_TOKEN = process.env.AIRTABLE_TOKEN;
-  const BASE_ID = 'appNEwC9kmw1NTshd';
-  const TABLE_NAME = 'Submissions';
-  const airtableUrl = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}`;
+  const {
+    name,
+    type,
+    location,
+    description,
+    link,
+    tips,
+    eventDate,
+    startTime,
+    endTime,
+    recurring,
+    frequency,
+    registrationRequired,
+    created,
+    photos,
+    photoFilePaths,
+  } = req.body;
 
   try {
-    const airtableRes = await fetch(airtableUrl, {
+    const airtableResponse = await fetch(`https://api.airtable.com/v0/${baseId}/${encodeURIComponent(table)}`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${AIRTABLE_TOKEN}`,
-        'Content-Type': 'application/json'
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ fields })
+      body: JSON.stringify({
+        fields: {
+          'Event name': name,
+          'Type': type,
+          'Location': location,
+          'Description': description,
+          'Link': link,
+          'Parent tips': tips,
+          'Event Date': eventDate,
+          'Start time': startTime,
+          'End time': endTime,
+          'Recurring': recurring,
+          'Frequency': frequency,
+          'Registration required': registrationRequired,
+          'Created': created,
+          'Photos': photos || [],
+          'Photos file paths': photoFilePaths || [],
+        },
+      }),
     });
 
-    const data = await airtableRes.json();
-    if (!airtableRes.ok) {
-      res.setHeader('Access-Control-Allow-Origin', 'https://sugar-free.family');
-      res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-      return res.status(airtableRes.status).json({ error: data.error });
+    const result = await airtableResponse.json();
+
+    if (!airtableResponse.ok) {
+      throw new Error(result.error?.message || 'Airtable error');
     }
 
-    res.setHeader('Access-Control-Allow-Origin', 'https://sugar-free.family');
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    return res.status(200).json({ success: true, data });
-  } catch (err) {
-    res.setHeader('Access-Control-Allow-Origin', 'https://sugar-free.family');
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    return res.status(500).json({ error: 'Server error', details: err.message });
+    res.status(200).json({ success: true, id: result.id });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message || 'Internal server error' });
   }
 }

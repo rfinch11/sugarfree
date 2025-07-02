@@ -16,51 +16,47 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // Collect form fields
-    const fields = {
-      Type: form.elements['activityType']?.value || '',
-      Name: document.getElementById('name').value,
-      Location: document.getElementById('location').value,
-      Description: document.getElementById('description').value,
-      Link: document.getElementById('link').value,
-      'Parent Tips': document.getElementById('tips').value,
-      'Event Date': document.getElementById('eventDate').value,
-      'Start Time': document.getElementById('startTime').value,
-      'End Time': document.getElementById('endTime').value,
-      Recurring: document.getElementById('recurring').checked,
-      Frequency: document.getElementById('frequency').value,
-      'Registration Required': document.getElementById('registrationRequired').checked,
-      Photos: uploaded.map(u => ({ url: u.url }))
+    // Collect form fields to send to the Edge Function
+    const formData = {
+      name: document.getElementById('name').value,
+      type: form.elements['activityType']?.value || '',
+      location: document.getElementById('location').value,
+      description: document.getElementById('description').value,
+      link: document.getElementById('link').value,
+      tips: document.getElementById('tips').value,
+      eventDate: document.getElementById('eventDate').value,
+      startTime: document.getElementById('startTime').value,
+      endTime: document.getElementById('endTime').value,
+      recurring: document.getElementById('recurring').checked,
+      frequency: document.getElementById('frequency').value,
+      registrationRequired: document.getElementById('registrationRequired').checked,
+      created: new Date().toISOString(),
+      photos: uploaded.map(u => ({ url: u.url })),
+      photoFilePaths: uploaded.map(u => u.fallback_url)
     };
 
-    const captchaToken = grecaptcha.getResponse();
-
-    try {
-      const res = await fetch('/api/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fields, captchaToken })
+    fetch('/api/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          alert('Submission successful!');
+          form.reset();
+          if (typeof previewContainer !== 'undefined') previewContainer.innerHTML = '';
+        } else {
+          alert('Submission failed: ' + data.error);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert('Submission error');
+      })
+      .finally(() => {
+        submitBtn.disabled = false;
       });
-
-      const data = await res.json();
-      if (res.ok) {
-        alert('Submission successful!');
-        form.reset();
-        if (typeof previewContainer !== 'undefined') previewContainer.innerHTML = '';
-        grecaptcha.reset();
-      } else {
-        const errorInfo = data.error;
-        const message = typeof errorInfo === 'object'
-          ? errorInfo.message || JSON.stringify(errorInfo)
-          : errorInfo;
-        alert(message || 'Submission failed');
-      }
-    } catch (err) {
-      console.error(err);
-      alert('Submission error');
-    } finally {
-      submitBtn.disabled = false;
-    }
   });
 });
 
